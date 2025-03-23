@@ -1,10 +1,12 @@
 <script setup>
 import { reactive, computed } from 'vue';
+import Operacao from './components/Operacao.vue';
+import Resultado from './components/Resultado.vue';
 
 const estado = reactive ({
   primeiroNumero: '',
   segundoNumero: '',
-  operador: '',
+  operador: '+',
 })
 
 const resultado = computed (() => {
@@ -21,46 +23,37 @@ const resultado = computed (() => {
     case '*':
       return numero1 * numero2;
     case '/':
-      return numero2 !== 0 ? numero1 / numero2 : "Erro" 
+      return numero2 !== 0 ? numero1 / numero2 : 'Não se divide por zero!'
   }
+})
 
-})  
+const atualizaSegundoNumero = (valor) => {
+  estado.segundoNumero = valor
+}
 
+const atualizaOperador = (valor) => {
+  estado.operador = valor
+}
 
+const atualizaPrimeiroNumero = (valor) => {
+  estado.primeiroNumero = valor
+}
 </script>
 
 <template>
   <div class="fundo">
     <div class="container">
       <h1 class="text-center title mt-5">Exercicio VueJS</h1>
-      <div class="row mt-5">
-        <div class="col-5">
-          <input type="number" v-model="estado.primeiroNumero" placeholder="numero-1" class="form-control p-2" />
-        </div>
-        <div class="col-2">
-          <select v-model="estado.operador" class="operador form-select text-center">
-              <option value="+">+</option>
-              <option value="-">-</option>
-              <option value="/">/</option>
-              <option value="*">x</option>
-          </select>
-        </div>
-        <div class="col-5">
-          <input type="number" v-model="estado.segundoNumero" placeholder="numero-2" class="form-control p-2" />
-        </div>
-      </div>
-      <div class="mt-5 row">
-        <div class="col-5">
-          <h1 class="ms-4">Resultado :</h1>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-resultado">{{ resultado }}</button>
-        </div>
-      </div>
+      <Operacao :operador="estado.operador" 
+        :primeiro-numero="estado.primeiroNumero" 
+        :segundo-numero="estado.segundoNumero"
+        :atualiza-primeiro-numero="atualizaPrimeiroNumero"
+        :atualiza-segundo-numero="atualizaSegundoNumero"
+        :atualiza-operador="atualizaOperador" />
+      <Resultado :resultado="resultado"/>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 
@@ -72,31 +65,4 @@ const resultado = computed (() => {
   color: #fff;
 }
 
-.form-select option {
-    text-align: left; 
-}
-
-.operador {
-  text-align: center;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  padding: 3px 40px;
-  color: #fff;
-  background-color: #2d5fb4;
-}
-
-.btn:hover {
-  background-color: #0f53c7;
-}
-
-.btn {
-  padding: 5px 25px;
-  color: #fff;
-  background-color: #2d5fb4;
-  font-size: 0,3rem;
-}
-
-.btn-resultado {
-  padding-inline: 50px;
-}
 </style>
